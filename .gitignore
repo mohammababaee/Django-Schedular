@@ -1,0 +1,24 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Local development settings
+.env
+
+# Database
+db.sqlite3
+
+# Ignore migrations, as they can be rebuilt
+**/migrations/
+
+# Ignore any virtual environments
+nilva_env/
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+celery_debug.log
+
+# Redis
+*.rdb
