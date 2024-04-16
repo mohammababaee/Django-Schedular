@@ -12,6 +12,8 @@ class NilvaUserAdmin(admin.ModelAdmin):
         - has_delete_permission(self, request, obj=None): Checks if the user has permission to delete a user object.
     """
 
+    list_display = ("email", "username")
+
     def get_queryset(self, request):
         """
         Filters the queryset based on user permissions.

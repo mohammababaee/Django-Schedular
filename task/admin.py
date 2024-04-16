@@ -11,6 +11,9 @@ class TaskAdmin(admin.ModelAdmin):
         - has_add_permission(self, request, obj=None): Checks if the user has permission to add a Task object.
     """
 
+    list_filter = ("due_datetime", "title", "description")
+    list_display = ("title", "description", "assigned_to", "due_datetime")
+
     def get_queryset(self, request):
         """
         Filters the queryset of tasks based on user permissions.
