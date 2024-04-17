@@ -149,6 +149,6 @@ At the end, this project wasn't intended for production level. For production re
 ### First Example :
 ![Example 1](/images/Capture.PNG)
 ### Second Example: 
-![Example 2](/images/my info.PNG)
+![Example 2](/images/my_info.PNG)
 # Project Workflow
 ![Workflow](/images/project_flow.PNG)
