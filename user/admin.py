@@ -1,5 +1,6 @@
 from django.contrib import admin
 from user.models import NilvaUser
+from django.http.request import HttpRequest
 
 
 class NilvaUserAdmin(admin.ModelAdmin):
@@ -27,48 +28,27 @@ class NilvaUserAdmin(admin.ModelAdmin):
         qs = super().get_queryset(request)
         if request.user.permissions == NilvaUser.ADMIN:
             return qs  # Return all users to admin users
-        return qs.filter(id=request.user.id)  # Only current user profile if they were not admin
+        return qs.filter(
+            id=request.user.id
+        )  # Only current user profile if they were not admin
 
-    def has_change_permission(self, request, obj=None):
-        """
-        Checks if the user has permission to change a user object.
+    def has_change_permission(self, request: HttpRequest, obj=None):
 
-        Args:
-            request: The HTTP request object.
-            obj (NilvaUser): The user object being modified.
-
-        Returns:
-            bool: True if the user has permission, False otherwise.
-        """
         if obj is not None and request.user.permissions == NilvaUser.ADMIN:
             return True  # True means admin user can change all profiles
-        return obj == request.user  # Conditional: noraml user only can change their profile
+        return (
+            obj == request.user
+        )  # Conditional: noraml user only can change their profile
 
-    def has_delete_permission(self, request, obj=None):
-        """
-        Checks if the user has permission to delete a user object.
-
-        Args:
-            request: The HTTP request object.
-            obj (NilvaUser): The user object being deleted.
-
-        Returns:
-            bool: True if the user has permission, False otherwise.
-        """
+    def has_delete_permission(self, request: HttpRequest, obj=None):
         if obj is not None and request.user.permissions == NilvaUser.ADMIN:
             return True  # Admin users can delete any user object
-        return False  # Normal users do not have delete 
-    def has_add_permission(self, request):
-        """
-        Checks if the user has permission to add a user object.
+        return False  # Normal users do not have delete
 
-        Args:
-            request: The HTTP request object.
-
-        Returns:
-            bool: True if the user has permission, False otherwise.
-        """
-        return request.user.permissions == NilvaUser.ADMIN
+    def has_add_permission(self, request: HttpRequest, obj=None):
+        if request.user.permissions == NilvaUser.ADMIN:
+            return True  # Admin users can add any user object
+        return False  # Normal users do not have add permissions
 
 
 admin.site.register(NilvaUser, NilvaUserAdmin)

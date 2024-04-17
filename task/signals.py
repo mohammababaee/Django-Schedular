@@ -4,6 +4,7 @@ from django.utils import timezone
 from task.celery_tasks import send_task_email
 from .models import Task
 
+
 @receiver(pre_save, sender=Task)
 def add_task_to_celery(sender, instance, **kwargs):
     """
@@ -15,7 +16,9 @@ def add_task_to_celery(sender, instance, **kwargs):
         time_difference = due_datetime - now
         instance.notification_status = Task.NOTIFIED
         instance.notification_datetime = timezone.now()
-        send_task_email.apply_async(args=[instance.id], countdown=time_difference.total_seconds())
+        send_task_email.apply_async(
+            args=[instance.id], countdown=time_difference.total_seconds()
+        )
     else:
         try:
             old_instance = sender.objects.get(pk=instance.pk)
@@ -27,7 +30,10 @@ def add_task_to_celery(sender, instance, **kwargs):
             time_difference = instance.due_datetime - now
             instance.notification_status = Task.NOTIFIED
             instance.notification_datetime = timezone.now()
-            send_task_email.apply_async(args=[instance.id], countdown=time_difference.total_seconds())
+            send_task_email.apply_async(
+                args=[instance.id], countdown=time_difference.total_seconds()
+            )
+
 
 @receiver(pre_save, sender=Task)
 def update_notification_datetime(sender, instance, **kwargs):
@@ -43,8 +49,14 @@ def update_notification_datetime(sender, instance, **kwargs):
     except sender.DoesNotExist:
         return
 
-    if old_instance.notification_status != instance.notification_status and instance.notification_status == Task.NOTIFIED:
+    if (
+        old_instance.notification_status != instance.notification_status
+        and instance.notification_status == Task.NOTIFIED
+    ):
         instance.notification_datetime = timezone.now()
 
-    if instance.notification_status == Task.NOTIFIED and instance.notification_datetime is None:
+    if (
+        instance.notification_status == Task.NOTIFIED
+        and instance.notification_datetime is None
+    ):
         instance.notification_datetime = timezone.now()

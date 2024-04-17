@@ -101,3 +101,54 @@ So What does matter to us?
 7. Enjoy
 
 **Finally** don't be afraid to ask anything from us.
+
+
+# Project roadmap
+
+## Introduction
+To initiate the project, the first step was defining the models. We primarily focused on two main objects: **User** and **Task**. This entailed creating dedicated apps for each and seamlessly integrating them into the project settings.
+
+## User Model
+In developing the User model, I extended Django's built-in `AbstractUser` and introduced a `permission` field. Although we could have utilized Django's `is_staff`, I opted for an `is_admin` boolean field. Additionally, to accommodate potential future permissions, I chose a choice field. Furthermore, I enforced the requirement of an email field for user registration.
+
+## Task Model
+The Task model followed the guidelines outlined in the project's README. However, I introduced some enhancements:
+- **notification_status:** Indicates whether the user has been notified.
+- **notification_datetime:** Records the date and time of the notification, facilitating easier job handling.
+
+These additional fields were incorporated to streamline operations and enhance functionality.
+
+## Admin Interface Implementation
+After defining the models, the subsequent step involved implementing the admin interface as per the README specifications.
+
+## Email Notification Mechanism
+The next significant task involved setting up a mechanism to send emails to users using Celery and Django signals. This allowed for asynchronous handling of email notifications, enhancing the responsiveness and efficiency of the system.
+
+## Task Validation API
+Subsequently, I developed an API to validate sets of tasks submitted by users, providing responses in the form of 'yes' or 'no'.
+
+## Test Suite
+At the project's conclusion, a comprehensive suite of tests was developed to ensure the reliability and robustness of the API, User model, and Task model.
+
+### API Tests
+A series of tests were designed to rigorously assess the functionality and behavior of the API. These tests covered various scenarios and edge cases to validate the correctness and responsiveness of the API endpoints.
+
+### User Model Tests
+Extensive testing was conducted on the User model to verify its integrity and functionality.
+
+### Task Model Tests
+Similar to the User model, thorough testing was performed on the Task model to validate its reliability and effectiveness. 
+
+At the end, this project wasn't intended for production level. For production readiness, the following steps should be taken:
+- Remove SECRET_KEY from settings file.
+- Change the database from SQLite to another database.
+- Avoid using WSGI.
+- Set DEBUG to False
+
+# API Response Photos
+### First Example :
+![Example 1](/images/Capture.PNG)
+### Second Example: 
+![Example 2](/images/my info.PNG)
+# Project Workflow
+![Workflow](/images/project_flow.PNG)

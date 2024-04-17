@@ -9,8 +9,6 @@ __pycache__/
 # Database
 db.sqlite3
 
-# Ignore migrations, as they can be rebuilt
-**/migrations/
 
 # Ignore any virtual environments
 nilva_env/

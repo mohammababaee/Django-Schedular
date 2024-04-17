@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.http import HttpRequest
 from .models import Task, NilvaUser
 
 
@@ -29,7 +30,7 @@ class TaskAdmin(admin.ModelAdmin):
             return qs
         return qs.filter(assigned_to=request.user)
 
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+    def formfield_for_foreignkey(self, db_field, request: HttpRequest, **kwargs):
         """
         Customizes the form field for the assigned_to foreign key.
 
@@ -54,6 +55,18 @@ class TaskAdmin(admin.ModelAdmin):
         ):
             kwargs["queryset"] = NilvaUser.objects.all()
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+    def has_change_permission(self, request: HttpRequest, obj=None):
+
+        if obj is not None and not request.user.permissions == NilvaUser.ADMIN:
+            return obj.assigned_to == request.user
+        return request.user.permissions == NilvaUser.ADMIN
+
+    def has_delete_permission(self, request: HttpRequest, obj=None):
+
+        if obj is not None and not request.user.permissions == NilvaUser.ADMIN:
+            return obj.assigned_to == request.user
+        return request.user.permissions == NilvaUser.ADMIN
 
 
 admin.site.register(Task, TaskAdmin)
