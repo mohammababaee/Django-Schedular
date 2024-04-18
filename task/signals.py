@@ -14,11 +14,14 @@ def add_task_to_celery(sender, instance, **kwargs):
         due_datetime = instance.due_datetime
         now = timezone.now()
         time_difference = due_datetime - now
-        instance.notification_status = Task.NOTIFIED
-        instance.notification_datetime = timezone.now()
-        send_task_email.apply_async(
-            args=[instance.id], countdown=time_difference.total_seconds()
-        )
+        try:
+            if time_difference>0:
+                # If Celery is not installed or configured.
+                send_task_email.apply_async(
+                    args=[instance.id], countdown=time_difference.total_seconds()
+                )
+        except Exception as e:
+            return
     else:
         try:
             old_instance = sender.objects.get(pk=instance.pk)
@@ -28,11 +31,14 @@ def add_task_to_celery(sender, instance, **kwargs):
         if old_instance.due_datetime != instance.due_datetime:
             now = timezone.now()
             time_difference = instance.due_datetime - now
-            instance.notification_status = Task.NOTIFIED
-            instance.notification_datetime = timezone.now()
-            send_task_email.apply_async(
-                args=[instance.id], countdown=time_difference.total_seconds()
-            )
+            try:
+                if time_difference > 0:
+                    # If Celery is not installed or configured.
+                    send_task_email.apply_async(
+                        args=[instance.id], countdown=time_difference.total_seconds()
+                    )
+            except Exception as e:
+                return 
 
 
 @receiver(pre_save, sender=Task)

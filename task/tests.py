@@ -6,35 +6,33 @@ from django.utils import timezone
 from user.models import NilvaUser
 from .models import Task
 
-"""
-Task creation is commented out here because it relies on Celery, which is not implemented for this demonstration. Since this is not a production-level setup, the task creation process is disabled to prevent potential failures. This comment serves as a reminder of the omitted functionality for future reference.
-"""
-# class TaskModelTestCase(TestCase):
-#     def setUp(self):
-#         self.user = NilvaUser.objects.create(
-#             username="testuser", email="test@example.com"
-#         )
 
-#     def test_task_creation(self):
-#         title = "Test Task"
-#         description = "This is a test task description."
-#         due_datetime = timezone.now() + timezone.timedelta(days=1)
-#         task = Task.objects.create(
-#             title=title,
-#             description=description,
-#             assigned_to=self.user,
-#             due_datetime=due_datetime,
-#         )
-#         self.assertEqual(
-#             str(task), f"Task {title} For {self.user}"
-#         )  # Moved this assertion here
-#         self.assertEqual(task.title, title)
-#         self.assertEqual(task.description, description)
-#         self.assertEqual(task.assigned_to, self.user)
-#         self.assertEqual(task.due_datetime, due_datetime)
-#         self.assertEqual(task.notification_status, Task.NOT_NOTIFIED)
-#         self.assertIsNone(task.notification_datetime)
-#         self.assertFalse(task.pre_tasks.exists())
+class TaskModelTestCase(TestCase):
+    def setUp(self):
+        self.user = NilvaUser.objects.create(
+            username="testuser", email="test@example.com"
+        )
+
+    def test_task_creation(self):
+        title = "Test Task"
+        description = "This is a test task description."
+        due_datetime = timezone.now() + timezone.timedelta(days=1)
+        task = Task.objects.create(
+            title=title,
+            description=description,
+            assigned_to=self.user,
+            due_datetime=due_datetime,
+        )
+        self.assertEqual(
+            str(task), f"Task {title} For {self.user}"
+        ) 
+        self.assertEqual(task.title, title)
+        self.assertEqual(task.description, description)
+        self.assertEqual(task.assigned_to, self.user)
+        self.assertEqual(task.due_datetime, due_datetime)
+        self.assertEqual(task.notification_status, Task.NOT_NOTIFIED)
+        self.assertIsNone(task.notification_datetime)
+        self.assertFalse(task.pre_tasks.exists())
 
 
 class CheckTaskValidationTestCase(TestCase):
