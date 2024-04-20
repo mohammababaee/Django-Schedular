@@ -142,7 +142,7 @@ Similar to the User model, thorough testing was performed on the Task model to v
 At the end, this project wasn't intended for production level. For production readiness, the following steps should be taken:
 - Remove SECRET_KEY from settings file.
 - Change the database from SQLite to another database.
-- Avoid using WSGI.
+- Use a production WSGI.
 - Set DEBUG to False
 
 # API Response Photos
